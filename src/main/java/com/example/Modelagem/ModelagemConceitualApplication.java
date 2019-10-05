@@ -1,5 +1,6 @@
 package com.example.Modelagem;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,29 +13,40 @@ import com.example.Modelagem.dominio.Cidade;
 import com.example.Modelagem.dominio.Cliente;
 import com.example.Modelagem.dominio.Endereco;
 import com.example.Modelagem.dominio.Estado;
+import com.example.Modelagem.dominio.Pagamento;
+import com.example.Modelagem.dominio.PagamentoBoleto;
+import com.example.Modelagem.dominio.PagamentoCartao;
+import com.example.Modelagem.dominio.Pedido;
 import com.example.Modelagem.dominio.Produto;
+import com.example.Modelagem.dominio.enums.EstadoPagamento;
 import com.example.Modelagem.dominio.enums.TipoCliente;
 import com.example.Modelagem.repositorios.CategoriaRepositorio;
 import com.example.Modelagem.repositorios.CidadeRepositorio;
 import com.example.Modelagem.repositorios.ClienteRepositorio;
 import com.example.Modelagem.repositorios.EnderecoRepositorio;
 import com.example.Modelagem.repositorios.EstadoRepositorio;
+import com.example.Modelagem.repositorios.PagamentoRepositorio;
+import com.example.Modelagem.repositorios.PedidoRepositorio;
 import com.example.Modelagem.repositorios.ProdutoRepositorio;
 
 @SpringBootApplication
 public class ModelagemConceitualApplication implements CommandLineRunner {
 	@Autowired
-	CategoriaRepositorio categoriaRepositorio;
+	private CategoriaRepositorio categoriaRepositorio;
 	@Autowired
-	ProdutoRepositorio produtoRepositorio;
+	private ProdutoRepositorio produtoRepositorio;
 	@Autowired
-	EstadoRepositorio estadoRespositorio;
+	private EstadoRepositorio estadoRespositorio;
 	@Autowired
-	CidadeRepositorio cidadeRepositorio;
+	private CidadeRepositorio cidadeRepositorio;
 	@Autowired
-	EnderecoRepositorio enderecoRepositorio;
+	private EnderecoRepositorio enderecoRepositorio;
 	@Autowired
-	ClienteRepositorio clienteRepositorio;
+	private ClienteRepositorio clienteRepositorio;
+	@Autowired
+	private PedidoRepositorio pedidoRepositorio;
+	@Autowired
+	private PagamentoRepositorio pagamentoRepositorio;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ModelagemConceitualApplication.class, args);
@@ -84,6 +96,22 @@ public class ModelagemConceitualApplication implements CommandLineRunner {
 
 		clienteRepositorio.saveAll(Arrays.asList(cli1));
 		enderecoRepositorio.saveAll(Arrays.asList(e1, e2));
+
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+
+		Pedido ped1 = new Pedido(null, sdf.parse("30/09/2017 10:32"), cli1, e1);
+		Pedido ped2 = new Pedido(null, sdf.parse("10/10/2017 19:35"), cli1, e2);
+
+		Pagamento pagto1 = new PagamentoCartao(null, EstadoPagamento.QUITADO, ped1, 6);
+		ped1.setPagamento(pagto1);
+		Pagamento pagto2 = new PagamentoBoleto(null, EstadoPagamento.PENDENTE, ped2, sdf.parse("20/10/2017 00:00"),
+				null);
+		ped2.setPagamento(pagto2);
+
+		cli1.getPedidos().addAll(Arrays.asList(ped1, ped2));
+
+		pedidoRepositorio.saveAll(Arrays.asList(ped1, ped2));
+		pagamentoRepositorio.saveAll(Arrays.asList(pagto1, pagto2));
 	}
 
 }
