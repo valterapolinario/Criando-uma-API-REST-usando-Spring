@@ -26,31 +26,31 @@ import com.example.Modelagem.services.exceptions.ObjectNotFoundException;
 @Service
 public class ClienteService {
 	@Autowired
-	private ClienteRepositorio repo;
+	private ClienteRepositorio clienteRepo;
 	@Autowired
-	EnderecoRepositorio endereco;
+	EnderecoRepositorio enderecoRepo;
 	@Autowired
-	CidadeRepositorio crp;
+	CidadeRepositorio cidadeRepo;
 
 	@Transactional
 	public Cliente insert(Cliente obj) {
 
 		obj.setId(null);
 
-		obj = repo.save(obj);
+		obj = clienteRepo.save(obj);
 
-		endereco.saveAll(obj.getEnderecos());
+		enderecoRepo.saveAll(obj.getEnderecos());
 
 		return obj;
 
 	}
 
 	public List<Cliente> findAll() {
-		return repo.findAll();
+		return clienteRepo.findAll();
 	}
 
 	public Cliente findById(Integer id) {
-		Optional<Cliente> obj = repo.findById(id);
+		Optional<Cliente> obj = clienteRepo.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Cliente.class.getName()));
 
@@ -60,13 +60,13 @@ public class ClienteService {
 
 		Cliente newObj = findById(obj.getId());
 		updateData(newObj, obj);
-		return repo.save(newObj);
+		return clienteRepo.save(newObj);
 	}
 
 	public void delete(Integer id) {
 		findById(id);
 		try {
-			repo.deleteById(id);
+			clienteRepo.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DataIntegrityException("não é possivel exluir um Cliente que contenha pedidos");
 		}
@@ -75,7 +75,7 @@ public class ClienteService {
 	public Page<Cliente> findPage(Integer page, Integer linesPerPage, String orderBy, String direction) {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 
-		return repo.findAll(pageRequest);
+		return clienteRepo.findAll(pageRequest);
 
 	}
 
@@ -87,7 +87,9 @@ public class ClienteService {
 		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCpnj(),
 				TipoCliente.toEnum(objDto.getTipo()));
 
-		Cidade cid = new Cidade(objDto.getCidadeId(), null, null);
+		Optional<Cidade> optionalCidade = cidadeRepo.findById(objDto.getCidadeId());
+
+		Cidade cid = optionalCidade.get();
 
 		Endereco end = new Endereco(null, objDto.getLogradouro(), objDto.getNumero(), objDto.getComplemento(),
 				objDto.getBairro(), objDto.getCep(), cli, cid);

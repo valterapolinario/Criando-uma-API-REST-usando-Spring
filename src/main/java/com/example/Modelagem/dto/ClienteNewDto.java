@@ -2,36 +2,49 @@ package com.example.Modelagem.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
+import com.example.Modelagem.services.validation.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNewDto implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	
-	
-	//dados do cliente
+
+	// dados do cliente
+	@NotEmpty(message = "preenchimento obrigatorio")
+	@Length(min = 5, max = 120, message = "O tamanho do nome deve ser entre 5 e 120 caracteres")
 	private String nome;
+	@NotEmpty(message = "preenchimento obrigatorio")
+	@Email(message = "E-mail inválido")
 	private String email;
+	@NotEmpty(message = "preenchimento CPF obrigatorio")
 	private String cpfOuCpnj;
 
 	private Integer tipo;
-	
-	
+
 	// dados do endereço
+	@NotEmpty(message = "preenchimento logradouro obrigatorio")
 	private String logradouro;
+	@NotEmpty(message = "preenchimento numero obrigatorio")
 	private String numero;
 	private String complemento;
 	private String bairro;
+	@NotEmpty(message = "preenchimento cep obrigatorio")
 	private String cep;
-	
+	@NotEmpty(message = "preenchimento de pelo menos um telefone obrigatorio")
 	private String telefone1;
 	private String telefone2;
 	private String telefone3;
-	
-	private Integer cidadeId;
-	
-	public ClienteNewDto() {
-		
-	}
 
+	private Integer cidadeId;
+
+	public ClienteNewDto() {
+
+	}
 
 	public String getNome() {
 		return nome;
@@ -136,5 +149,5 @@ public class ClienteNewDto implements Serializable {
 	public void setCidadeId(Integer cidadeId) {
 		this.cidadeId = cidadeId;
 	}
-	
+
 }
