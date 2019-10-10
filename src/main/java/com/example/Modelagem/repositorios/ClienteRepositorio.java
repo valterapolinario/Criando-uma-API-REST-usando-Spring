@@ -9,6 +9,8 @@ import com.example.Modelagem.dominio.Cliente;
 @Repository
 public interface ClienteRepositorio extends JpaRepository<Cliente, Integer> {
 	@Transactional(readOnly = true)
-	Cliente findByEmail(String email);
+	public Cliente findByEmail(String email);
+	
+	
 
 }

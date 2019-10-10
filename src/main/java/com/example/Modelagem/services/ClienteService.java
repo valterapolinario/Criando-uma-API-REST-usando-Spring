@@ -84,7 +84,7 @@ public class ClienteService {
 	}
 
 	public Cliente toClie(ClienteNewDto objDto) {
-		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCpnj(),
+		Cliente cli = new Cliente(null, objDto.getNome(), objDto.getEmail(), objDto.getCpfOuCnpj(),
 				TipoCliente.toEnum(objDto.getTipo()));
 
 		Optional<Cidade> optionalCidade = cidadeRepo.findById(objDto.getCidadeId());

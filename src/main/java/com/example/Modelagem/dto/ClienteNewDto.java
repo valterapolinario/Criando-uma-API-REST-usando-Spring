@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -22,7 +23,8 @@ public class ClienteNewDto implements Serializable {
 	@Email(message = "E-mail inválido")
 	private String email;
 	@NotEmpty(message = "preenchimento CPF obrigatorio")
-	private String cpfOuCpnj;
+	@Pattern(regexp = "[0-9]+", message = "Preencher apenas com numeros")
+	private String cpfOuCnpj;
 
 	private Integer tipo;
 
@@ -62,12 +64,12 @@ public class ClienteNewDto implements Serializable {
 		this.email = email;
 	}
 
-	public String getCpfOuCpnj() {
-		return cpfOuCpnj;
+	public String getCpfOuCnpj() {
+		return cpfOuCnpj;
 	}
 
-	public void setCpfOuCpnj(String cpfOuCpnj) {
-		this.cpfOuCpnj = cpfOuCpnj;
+	public void setCpfOuCnpj(String cpfOuCnpj) {
+		this.cpfOuCnpj = cpfOuCnpj;
 	}
 
 	public Integer getTipo() {

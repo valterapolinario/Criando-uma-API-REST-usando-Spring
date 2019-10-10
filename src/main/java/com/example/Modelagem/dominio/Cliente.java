@@ -30,7 +30,7 @@ public class Cliente implements Serializable {
 	private String nome;
 	@Column(unique = true)
 	private String email;
-	private String cpfOuCpnj;
+	private String cpfOuCnpj;
 
 	private Integer tipo;
 
@@ -49,12 +49,12 @@ public class Cliente implements Serializable {
 
 	}
 
-	public Cliente(Integer id, String nome, String email, String cpfOuCpnj, TipoCliente tipo) {
+	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipo) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.email = email;
-		this.cpfOuCpnj = cpfOuCpnj;
+		this.cpfOuCnpj = cpfOuCnpj;
 		this.tipo = (tipo == null) ? null : tipo.getCod();
 	}
 
@@ -82,12 +82,12 @@ public class Cliente implements Serializable {
 		this.email = email;
 	}
 
-	public String getCpfOuCpnj() {
-		return cpfOuCpnj;
+	public String getCpfOuCnpj() {
+		return cpfOuCnpj;
 	}
 
-	public void setCpfOuCpnj(String cpfOuCpnj) {
-		this.cpfOuCpnj = cpfOuCpnj;
+	public void setCpfOuCpnj(String cpfOuCnpj) {
+		this.cpfOuCnpj = cpfOuCnpj;
 	}
 
 	public List<Endereco> getEnderecos() {
